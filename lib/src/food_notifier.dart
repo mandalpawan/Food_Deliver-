@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'food_list_data.dart';
 
 class FoodNotifier with ChangeNotifier{
+
+
   List<Food> _foodList = [];
 
   Food _currentFood;

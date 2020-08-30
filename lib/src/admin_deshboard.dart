@@ -68,7 +68,7 @@ class _AdminDeshBoardState extends State<AdminDeshBoard> {
       ),
 
       body: Center(
-        child: Text("Desh Board",style: TextStyle(fontSize: 35.0),),
+        child: Text("DeshBoard",style: TextStyle(fontSize: 35.0),),
       ),
     );
   }

@@ -1,11 +1,13 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:food_delivery/src/food_list_data.dart';
 import 'package:food_delivery/src/food_notifier.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as path;
+
+
 
 getFoods(FoodNotifier foodNotifier) async{
   QuerySnapshot snapshot = await Firestore.instance.collection('Foods')

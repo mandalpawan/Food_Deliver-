@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery/src/card_model.dart';
+import 'package:food_delivery/src/cart_notifier.dart';
 import 'package:food_delivery/src/food_api.dart';
+import 'package:food_delivery/src/food_detal_Bottom.dart';
 import 'package:provider/provider.dart';
 
 import 'food_detail.dart';
@@ -21,6 +24,19 @@ class _FavorateState extends State<Favorate> {
     super.initState();
   }
 
+
+
+  void showfoodDetail(){
+    showModalBottomSheet(context: context, builder: (context){
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 20.0),
+        child: foodDetail(),
+      );
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -34,61 +50,85 @@ class _FavorateState extends State<Favorate> {
               padding: EdgeInsets.all(10.0),
               child: GestureDetector(
                 onTap: (){
-                  foodNotifier.currentFood = foodNotifier.foodList[index];
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder:  (BuildContext context){
-                        return FoodDetail();
-                      }
-                      )
-                  );
+                 // foodNotifier.currentFood = foodNotifier.foodList[index];
+                 // Navigator.of(context).push(
+                  //    MaterialPageRoute(builder:  (BuildContext context){
+                    //    return FoodDetail();
+                   //   }
+                   //   )
+                //  );
                 },
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Container(
-                        height: 100.0,
-                        width: 100.0,
-                       child: Image.network(
-                          foodNotifier.foodList[index].image != null ?
-                          foodNotifier.foodList[index].image : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 20.0,),
-                    Column(
+                child: Column(
+                  children: [
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                            foodNotifier.foodList[index].title,
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: Container(
+                            height: 100.0,
+                            width: 100.0,
+                           child: Image.network(
+                              foodNotifier.foodList[index].image != null ?
+                              foodNotifier.foodList[index].image : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
+                              fit: BoxFit.cover,
                             ),
-                        ),
-                        SizedBox(height: 10.0,),
-                        Text(
-                            foodNotifier.foodList[index].Catagory,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.grey,
                           ),
                         ),
-                        SizedBox(height: 10.0,),
-                        Text(
-                          "\u20B9 "+foodNotifier.foodList[index].price,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.orangeAccent,
-                            fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      ],
-                    ),
+                        SizedBox(width: 20.0,),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                                foodNotifier.foodList[index].title,
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                            ),
+                            SizedBox(height: 10.0,),
 
-                  ]
+                            Text(
+                              "\u20B9 "+foodNotifier.foodList[index].price,
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.orangeAccent,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+
+                            SizedBox(height: 10.0,),
+
+                            Text(
+                              foodNotifier.foodList[index].Catagory,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.grey,
+                              ),
+                            ),
+
+                          ],
+                        ),
+
+                        Spacer(),
+
+                        RaisedButton(
+                          color: Colors.orangeAccent,
+                          onPressed: (){
+                            showfoodDetail();
+                            foodNotifier.currentFood = foodNotifier.foodList[index];
+                          },
+                          child: Text(
+                            "ADD",
+                            style: TextStyle(
+                              color: Colors.white
+                            ),
+                          ),
+                        ),
+
+                      ]
+                    ),
+                  ],
                 ),
               ),
             );

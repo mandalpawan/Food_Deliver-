@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery/src/final_order_page.dart';
+import 'package:food_delivery/src/order_page.dart';
 
 //Pages importing
 import 'homepage.dart';
@@ -62,7 +64,13 @@ class _Main_screenState extends State<Main_screen> {
             ),
 
             IconButton(
-              onPressed: (){},
+              onPressed: (){
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context){
+                   return OrderFinal();
+                  }
+                ));
+              },
               icon: _buildShoppingCart(),
             ),
 
@@ -212,7 +220,7 @@ class _Main_screenState extends State<Main_screen> {
     Widget _buildShoppingCart(){
      return Stack(
        children: <Widget>[
-         Icon(Icons.shopping_cart,
+         Icon(Icons.shopping_basket,
            color: Theme.of(context).primaryColor,
          ),
          Positioned(
