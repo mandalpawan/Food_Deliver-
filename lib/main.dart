@@ -1,33 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery/src/cart_notifier.dart';
+import 'package:food_delivery/page/login.dart';
+import 'package:food_delivery/page/spash.dart';
+import 'package:food_delivery/provider/app.dart';
+import 'package:food_delivery/provider/product.dart';
+import 'package:food_delivery/provider/user.dart';
+import 'package:food_delivery/src/admin_deshboard.dart';
 import 'package:food_delivery/src/food_notifier.dart';
-import 'package:food_delivery/src/service_auth.dart';
-import 'package:food_delivery/src/user_model.dart';
-import 'package:food_delivery/src/wrapper.dart';
+import 'package:food_delivery/src/main_screen.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(MultiProvider(
-  providers: [
+
+
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider.value(value: UserProvider.initialize()),
     ChangeNotifierProvider(
       create: (context) => FoodNotifier(),
     ),
-  ],
-  child: MyApp(),
-));
+    ChangeNotifierProvider.value(value: ProductProvider.initialize()),
+    ChangeNotifierProvider.value(value: AppProvider()),
+
+  ], child: MyApp()
+
+  )
+  );
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<User>.value(
-      value: AuthService().user,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: "Food Ordering App",
-        theme: ThemeData(
-         primaryColor: Colors.blueAccent,
-        ),
-        home: Wrapper(),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+          primaryColor: Colors.orangeAccent
       ),
+      home: ScreensController(),
     );
   }
 }
+
+
+
+class ScreensController extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context);
+    switch(user.status){
+      case Status.Uninitialized:
+        return Splash();
+      case Status.Unauthenticated:
+      case Status.Authenticating:
+        return Login();
+      case Status.Authenticated:
+        return  user.userModel.userType == "admin"?  AdminDeshBoard() : Main_screen();
+        //return AdminDeshBoard();
+      default: return Login();
+    }
+  }
+}
+

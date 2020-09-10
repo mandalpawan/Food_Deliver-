@@ -66,8 +66,8 @@ class _FavorateState extends State<Favorate> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
                           child: Container(
-                            height: 100.0,
-                            width: 100.0,
+                            height: 80.0,
+                            width: 80.0,
                            child: Image.network(
                               foodNotifier.foodList[index].image != null ?
                               foodNotifier.foodList[index].image : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
@@ -82,7 +82,7 @@ class _FavorateState extends State<Favorate> {
                             Text(
                                 foodNotifier.foodList[index].title,
                                 style: TextStyle(
-                                  fontSize: 18.0,
+                                  fontSize: 14.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                             ),
@@ -112,18 +112,25 @@ class _FavorateState extends State<Favorate> {
 
                         Spacer(),
 
-                        RaisedButton(
-                          color: Colors.orangeAccent,
-                          onPressed: (){
-                            showfoodDetail();
-                            foodNotifier.currentFood = foodNotifier.foodList[index];
-                          },
-                          child: Text(
-                            "ADD",
-                            style: TextStyle(
-                              color: Colors.white
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 20.0,),
+                            RaisedButton(
+                              color: Colors.orangeAccent,
+                              onPressed: (){
+                                showfoodDetail();
+                                foodNotifier.currentFood = foodNotifier.foodList[index];
+                              },
+                              child: Text(
+                                "ADD",
+                                style: TextStyle(
+                                  color: Colors.white
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
 
                       ]

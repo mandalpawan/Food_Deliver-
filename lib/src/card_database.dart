@@ -1,48 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:food_delivery/src/card_model.dart';
+import 'package:uuid/uuid.dart';
 
-class CardDataServices{
+Firestore _firestore = Firestore.instance;
 
-  final String uid;
+void addToCart({String userId,String title,String price,String discount,String catagory,String discription,
+  String imageurl,String quantity,String foodId,String totalPrice}){
 
-  CardDataServices({this.uid});
+  var uuid = Uuid();
+  String cartItemId = uuid.v4();
 
-  final CollectionReference cardCollection = Firestore.instance.collection('cards');
+  print("THE USER ID IS: $userId");
 
 
-  Future upDateCardData(String title,String price,String
-  discount, String Catagory,String discription, String image,String FoodId,String quantity,String totalPrice) async {
-    return await cardCollection.document(uid).collection('carts').add(
-        {
-          'id' : null,
-          'title' :title,
-          'price' : price,
-          'discount' :discount,
-          'Catagory' : Catagory,
-          'discription' : discription,
-          'image' : image,
-          'quantity' : quantity,
-          'FoodId': FoodId,
-          'totalPrice': totalPrice,
-        }
-    );
-  }
+  _firestore.collection('Carts').document(userId).collection('carts').document(cartItemId).setData(
+    {
+      'id' : cartItemId,
+      'title' : title,
+      'price' : price,
+      "discount" :discount,
+      "Catagory" : catagory,
+      "discription": discription,
+      "image" : imageurl,
+      "quantity" : quantity,
+      "FoodId" : foodId,
+      "totalPrice": totalPrice,
 
-//userlist from snapshot
-  CardModel _CardlistFromSnapsort(DocumentSnapshot snapshot) {
-    return CardModel(
-      id: snapshot.data['uid'],
-      title: snapshot.data['title'],
-      price: snapshot.data['price'],
-      discount: snapshot.data['discount'],
-      image: snapshot.data['image'],
-      Catagory: snapshot.data['Catagory'],
-      discription: snapshot.data['discription'],
-      quantity: snapshot.data['quantity'],
-    );
-  }
+    }
+  );
 
-  Stream<QuerySnapshot> get CardData {
-    return cardCollection.document(uid).collection('carts').snapshots();
-  }
 }
+
+Future<CardModel> getCartItem(String id) => _firestore.collection('Carts').document(id).collection('carts').document().get().then((doc){
+  return CardModel.fromSnapshot(doc);
+});

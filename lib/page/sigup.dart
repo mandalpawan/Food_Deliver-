@@ -1,38 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery/src/payment.dart';
+import 'package:food_delivery/page/common.dart';
+import 'package:food_delivery/page/loading.dart';
+import 'package:food_delivery/provider/user.dart';
+import 'package:food_delivery/src/main_screen.dart';
+import 'package:provider/provider.dart';
 
-class OrderFrom extends StatefulWidget {
+
+class SignUp extends StatefulWidget {
   @override
-  _OrderFromState createState() => _OrderFromState();
+  _SignUpState createState() => _SignUpState();
 }
 
-class _OrderFromState extends State<OrderFrom> {
+class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
 
-  TextEditingController _mobile = TextEditingController();
-  TextEditingController _table = TextEditingController();
+  TextEditingController _email = TextEditingController();
+  TextEditingController _password = TextEditingController();
   TextEditingController _name = TextEditingController();
   bool hidePass = true;
 
   @override
   Widget build(BuildContext context) {
-
+    final user = Provider.of<UserProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Order Details"
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.close),
-          onPressed: (){
-            Navigator.pop(context);
-          },
-        ),
-      ),
       key: _key,
-      body:Stack(
+      body: user.status == Status.Authenticating ? Loading() : Stack(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(0),
@@ -58,7 +52,7 @@ class _OrderFromState extends State<OrderFrom> {
                         child: Container(
                             alignment: Alignment.topCenter,
                             child: Image.asset(
-                              'assets/images/Illu/order.png',
+                              'assets/images/Illu/welcome.png',
                               width: 260.0,height: 150.0,
                             )),
                       ),
@@ -94,51 +88,27 @@ class _OrderFromState extends State<OrderFrom> {
                         const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
                         child: Material(
                           borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.grey.withOpacity(0.3),
+                          color: Colors.grey.withOpacity(0.2),
                           elevation: 0.0,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 12.0),
                             child: ListTile(
                               title: TextFormField(
-                                keyboardType: TextInputType.number,
-                                controller: _mobile,
+                                controller: _email,
                                 decoration: InputDecoration(
-                                    hintText: "Mobile Number",
-                                    icon: Icon(Icons.phone),
+                                    hintText: "Email",
+                                    icon: Icon(Icons.alternate_email),
                                     border: InputBorder.none),
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return "The name field cannot be empty";
+                                    Pattern pattern =
+                                        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                    RegExp regex = new RegExp(pattern);
+                                    if (!regex.hasMatch(value))
+                                      return 'Please make sure your email address is valid';
+                                    else
+                                      return null;
                                   }
-                                  return null;
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                        const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
-                        child: Material(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.grey.withOpacity(0.3),
-                          elevation: 0.0,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 12.0),
-                            child: ListTile(
-                              title: TextFormField(
-                                controller: _table,
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                    hintText: "Table Number",
-                                    icon: Icon(Icons.table_chart),
-                                    border: InputBorder.none),
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return "The name field cannot be empty";
-                                  }
-                                  return null;
                                 },
                               ),
                             ),
@@ -150,22 +120,60 @@ class _OrderFromState extends State<OrderFrom> {
                         padding:
                         const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
                         child: Material(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.grey.withOpacity(0.3),
+                          elevation: 0.0,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 12.0),
+                            child: ListTile(
+                              title: TextFormField(
+                                controller: _password,
+                                obscureText: hidePass,
+                                decoration: InputDecoration(
+                                    hintText: "Password",
+                                    icon: Icon(Icons.lock_outline),
+                                    border: InputBorder.none),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "The password field cannot be empty";
+                                  } else if (value.length < 6) {
+                                    return "the password has to be at least 6 characters long";
+                                  }
+                                  return null;
+                                },
+                              ),
+                              trailing: IconButton(
+                                  icon: Icon(Icons.remove_red_eye),
+                                  onPressed: () {
+                                    setState(() {
+                                      hidePass = !hidePass;
+                                    });
+                                  }),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding:
+                        const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
+                        child: Material(
                             borderRadius: BorderRadius.circular(20.0),
-                            color: Colors.orangeAccent,
+                            color: Colors.black,
                             elevation: 0.0,
                             child: MaterialButton(
                               onPressed: () async{
-                                if(_formKey.currentState.validate()) {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context){
-                                      return Payment();
-                                    }
-                                  ));
+                                if(_formKey.currentState.validate()){
+                                  if(!await user.signUp(_name.text ,_email.text, _password.text)){
+                                    _key.currentState.showSnackBar(SnackBar(content: Text("Sign up failed")));
+                                    return;
+                                  }
+                                  changeScreenReplacement(context, Main_screen());
                                 }
                               },
                               minWidth: MediaQuery.of(context).size.width,
                               child: Text(
-                                "Process to Payment",
+                                "Sign up",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Colors.white,
@@ -174,6 +182,19 @@ class _OrderFromState extends State<OrderFrom> {
                               ),
                             )),
                       ),
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                "I already have an account",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.black, fontSize: 16),
+                              ))),
+
+
                     ],
                   )),
             ),

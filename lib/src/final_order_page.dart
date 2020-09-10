@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery/model/cartitem.dart';
+import 'package:food_delivery/model/order.dart';
+import 'package:food_delivery/provider/user.dart';
+import 'package:provider/provider.dart';
 
 class OrderFinal extends StatefulWidget {
   @override
@@ -8,6 +12,10 @@ class OrderFinal extends StatefulWidget {
 class _OrderFinalState extends State<OrderFinal> {
   @override
   Widget build(BuildContext context) {
+
+    final user = Provider.of<UserProvider>(context);
+
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -21,172 +29,148 @@ class _OrderFinalState extends State<OrderFinal> {
               color: Colors.black
             ),
           ),
+          leading: IconButton(
+            icon: Icon(Icons.close),
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          ),
         ),
-        body: SingleChildScrollView(
+        body:  SingleChildScrollView(
+
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal:10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "Orders",
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Card(
-                  elevation: 5.0,
-                  child:Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "Product details",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              height: 100.0,
-                              width: 100.0,
-                              color: Colors.redAccent,
-                            ),
-
-                            SizedBox(width: 20.0,),
-                            Column(
+            child: ListView.builder(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                itemCount: user.orders.length,
+                itemBuilder: (_, index){
+                  OrderModel _order = user.orders[index];
+                  return Column(
+                      children:<Widget>[
+                        Card(
+                          margin: EdgeInsets.all(8.0),
+                          elevation: 5.0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
                                 Text(
-                                    "Food Name",
+                                    "Order No.\n "+ user.orders[index].id,
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18.0
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.0
                                   ),
                                 ),
-                                SizedBox(height: 15.0,),
+
+
+                                ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: ClampingScrollPhysics(),
+                                    itemCount: user.orders[index].cart.length,
+                                    itemBuilder: (_ , indexs) {
+                                      print(user.orders[index].cart[indexs]["name"]);
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius: BorderRadius.circular(35.0),
+                                                  child: Container(
+                                                    height: 70.0,
+                                                    width: 70.0,
+                                                    child: Image.network(
+                                                        user.orders[index].cart[indexs]["image"],
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10.0,),
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                        user.orders[index].cart[indexs]["name"],
+                                                      style: TextStyle(
+                                                        fontSize: 16.0,
+                                                        fontWeight: FontWeight.w600
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 10.0,),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                           "\u20B9 " + user.orders[index].cart[indexs]["price"],
+                                                          style: TextStyle(
+                                                            color: Colors.orangeAccent
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                            " x "
+                                                        ),
+                                                        Text(
+                                                            user.orders[index].cart[indexs]["quantity"]
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                ),
+                                SizedBox(height: 10.0,),
                                 Text(
-                                    "Food Detail"
+                                    "Total Amount\t\t \u20B9 "+ user.orders[index].total.toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16.0
+                                  ),
+                                ),
+                                SizedBox(height: 8.0,),
+                                Text(
+                                  "Payment Mode : Case",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16.0
+                                ),
+
+                                ),
+                                SizedBox(height: 10.0,),
+                                Text(
+                                  'Delivery Detail :',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16.0
+                                  ),
+                                ),
+                                SizedBox(height: 8.0,),
+                                Text(
+                                    'Name : Pawan Mandal'
+                                ),
+                                SizedBox(height: 5.0,),
+                                Text(
+                                    'Mobile Number : 8603587194'
+                                ),
+                                SizedBox(height: 5.0,),
+                                Text(
+                                    'Table No. : 05'
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-
-                        SizedBox(height: 10.0,),
-
-                        Text(
-                          "Delivery details",
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold
                           ),
                         ),
-
-                        SizedBox(height: 5.0,),
-                        Text("Name : Pawan Mandal "),
-                        SizedBox(height: 5.0,),
-                        Text("Phone No. : 8603587194"),
-                        SizedBox(height: 5.0,),
-                        Text("Table No. : 5"),
-                        SizedBox(height: 5.0,),
-                        Text("Payment Method : COD"),
-
-                        SizedBox(height: 10.0,),
-
-                        Text(
-                          "Order Status",
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-
-                        SizedBox(height: 10.0,),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.adjust,
-                                  color: Colors.blue,
-                                ),
-                                Text(
-                                  "Ordered",
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                    Icons.adjust
-                                ),
-                                Text(
-                                  "Processing",
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.adjust,
-                                ),
-                                Text(
-                                  "Out Of Delivery",
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.adjust,
-                                ),
-                                Text(
-                                  "Delivered",
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                      ]
+                  );
+                }
                 ),
-              ],
-            ),
           ),
         ),
       ),

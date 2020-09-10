@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery/provider/app.dart';
+import 'package:food_delivery/provider/user.dart';
 import 'package:food_delivery/src/card_database.dart';
 import 'package:food_delivery/src/card_model.dart';
 import 'package:food_delivery/src/cart_notifier.dart';
 import 'package:food_delivery/src/food_notifier.dart';
 import 'package:food_delivery/src/user_model.dart';
 import 'package:provider/provider.dart';
+import 'package:food_delivery/src/card_database.dart';
 
 
 class foodDetail extends StatefulWidget {
@@ -16,13 +19,14 @@ class _foodDetailState extends State<foodDetail> {
 
   int quantity = 1;
   int totalPrice = 0;
+  final _key = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
 
     FoodNotifier foodNotifier = Provider.of<FoodNotifier>(context);
-
-    final user = Provider.of<User>(context);
+    final user = Provider.of<UserProvider>(context);
+    final app = Provider.of<AppProvider>(context);
 
     _onFoodUploaded(CardModel cart) {
       CartNotifier cartNotifier = Provider.of<CartNotifier>(context, listen: false);
@@ -31,6 +35,7 @@ class _foodDetailState extends State<foodDetail> {
     }
 
     return Scaffold(
+      key: _key,
       bottomNavigationBar: BottomAppBar(
         elevation: 0.0,
         child: Row(
@@ -89,19 +94,24 @@ class _foodDetailState extends State<foodDetail> {
             RaisedButton(
               color: Colors.orangeAccent,
               padding: EdgeInsets.symmetric(vertical: 5.0,horizontal: 40.0),
-              onPressed: (){
-                CardDataServices(uid: user.uid).upDateCardData(
-                    foodNotifier.currentFood.title,
-                    foodNotifier.currentFood.price,
-                    foodNotifier.currentFood.discount,
-                    foodNotifier.currentFood.Catagory,
-                    foodNotifier.currentFood.discription,
-                    foodNotifier.currentFood.image,
-                    foodNotifier.currentFood.id,
-                    quantity.toString(),
-                  totalPrice.toString(),
-                );
-                Navigator.of(context).pop();
+              onPressed: () async {
+                app.changeIsLoading();
+                bool value =  await user.addToCart(product: foodNotifier.currentFood,quantity: quantity.toString());
+                  if(value){
+                  print("Item added to cart");
+                  _key.currentState.showSnackBar(
+                  SnackBar(content: Text("Added ro Cart!"))
+                  );
+                  user.reloadUserModel();
+                  app.changeIsLoading();
+                  Navigator.of(context).pop();
+                  return;
+                  } else{
+                  print("Item NOT added to cart");
+
+                  }
+
+
               },
               child: totalPrice == 0 ?
               Text(
@@ -146,7 +156,7 @@ class _foodDetailState extends State<foodDetail> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
                 child: Container(
-                  height: 200.0,
+                  height: 180.0,
                   width: MediaQuery.of(context).size.width,
                   child: Image.network(
                     foodNotifier.currentFood.image != null ?
@@ -165,7 +175,7 @@ class _foodDetailState extends State<foodDetail> {
                     foodNotifier.currentFood.title,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
+                      fontSize: 18.0,
                     ),
                   ),
 
@@ -183,7 +193,7 @@ class _foodDetailState extends State<foodDetail> {
               Text(
                  foodNotifier.currentFood.discription,
                 style: TextStyle(
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                 ),
               ),
 
@@ -191,8 +201,6 @@ class _foodDetailState extends State<foodDetail> {
           ),
         ),
       ),
-
-
     );
   }
 }

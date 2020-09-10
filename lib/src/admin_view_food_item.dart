@@ -29,22 +29,80 @@ class _ShowAdminFoodDetailState extends State<ShowAdminFoodDetail> {
 
         ),
       ),
-      body: Center(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Image.network(
+      body: Container(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: Container(
+                height: 250.0,
+                width: MediaQuery.of(context).size.width,
+                child: Image.network(
                   foodNotifier.currentFood.image != null ?
                   foodNotifier.currentFood.image : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
+                  fit: BoxFit.cover,
+                ),
               ),
-              SizedBox(height: 34.0,),
-              Text(foodNotifier.currentFood.title,
+            ),
+
+            SizedBox(height: 10.0,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(foodNotifier.currentFood.title,
+                  style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.bold
+                  ),
+                ),
+                Text(
+                   "Rs "+ foodNotifier.currentFood.price,
+                  style: TextStyle(
+                    color: Colors.orangeAccent,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+
+                Text(
+                  foodNotifier.currentFood.sale,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18.0
+                  ),
+                ),
+            SizedBox(
+              height: 15.0,
+            ),
+
+            Text(
+              "Discription",
               style: TextStyle(
-                fontSize: 34.0,
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
               ),
+            ),
+
+            SizedBox(
+              height: 15.0,
+            ),
+
+            Text(
+              foodNotifier.currentFood.discription,
+              style: TextStyle(
+                fontSize: 16.0,
+                color: Colors.grey
               ),
-            ],
-          ),
+            ),
+
+          ],
         ),
       ),
 

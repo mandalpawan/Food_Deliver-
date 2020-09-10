@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/src/food_list_data.dart';
 import 'package:food_delivery/src/food_notifier.dart';
+import 'package:food_delivery/src/sigin_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +27,13 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
   String _imageUrl;
   File _imageFile;
 
+  var _FoodListCatagory = ["Fast Food", "Burger","Pizza","Chanies","South","IceCream"];
+
+  var _FoodListSale = ["OnSale", "Not Sale"];
+
+  var _currentFoodCatagoryList = "Fast Food";
+  var _currentFoodSaleList = "Not Sale" ;
+
   @override
   void initState(){
     super.initState();
@@ -43,7 +51,7 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
 
   Widget _showImage(){
     if (_imageFile == null && _imageUrl == null) {
-      return Text("image placeholder");
+      return SizedBox();
       print("No image found");
 
     } else if(_imageFile != null){
@@ -131,25 +139,56 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
     );
   }
 
-  Widget _buildCatagoryField(){
-    return TextFormField(
-      initialValue: _currentFood.Catagory,
-      decoration: InputDecoration(labelText: "Catagory"),
-      keyboardType: TextInputType.text,
-      style: TextStyle(fontSize: 18.0),
-      validator: (String value){
-        if(value.isEmpty){
-          return "Catagory field is required";
-        }
-        if(value.length<3 || value.length>20){
-          return "Catagory must be less then 3 and less the 20";
-        }
-        return null;
-      },
-      onSaved: (String value){
-        _currentFood.Catagory = value;
-      },
+  Widget _buildOnSaleField(){
+    return Container(
+      child: DropdownButtonFormField<String>(
+        items: _FoodListSale.map((String dropDownItem){
+          return DropdownMenuItem<String>(
+            value: dropDownItem,
+            child: Text(dropDownItem),
+          );
+        }).toList(),
+        decoration: InputDecoration(labelText: "OnSale",),
+        onChanged: (String value) {
+          setState(() {
+            _currentFoodSaleList = value;
+          });
+        },
+        value: _currentFoodSaleList,
+        onSaved: (String value){
+          _currentFood.sale =value;
+        },
+      ),
     );
+
+  }
+
+  Widget _buildCatagoryField(){
+    return Container(
+      child: DropdownButtonFormField<String>(
+        items: _FoodListCatagory.map((String dropDownItem){
+          return DropdownMenuItem<String>(
+            value: dropDownItem,
+            child: Text(dropDownItem),
+          );
+        }).toList(),
+        decoration: InputDecoration(labelText: "Catagory",),
+
+        onChanged: (String value) {
+          setState(() {
+            _currentFoodCatagoryList = value;
+          });
+        },
+        validator: (String value){
+
+        },
+        value: _currentFoodCatagoryList,
+        onSaved: (String value){
+          _currentFood.Catagory =value;
+        },
+      ),
+    );
+
   }
 
   Widget _buildDiscriptionField(){
@@ -227,7 +266,8 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
 
 
     print("name: ${_currentFood.title}");
-    print("Catagory: ${_currentFood.Catagory}");
+    print("CatagoryDrop: ${_currentFood.Catagory}");
+    print("CatagoryDropsale: ${_currentFood.sale}");
     print("Catagory: ${_currentFood.discription}");
     print("Catagory: ${_currentFood.price}");
     print("Catagory: ${_currentFood.discount}");
@@ -250,7 +290,7 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
               _showImage(),
               SizedBox(height: 16.0,),
               Text(
-                 widget.isUpdating ? "Updating Food" : "Create Food",
+                 widget.isUpdating ? "Updating Food Item" : "ADD Food Item",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 30.0),
               ),
@@ -271,9 +311,12 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
 
               _buildNameField(),
               _buildCatagoryField(),
+              _buildOnSaleField(),
               _buildDiscriptionField(),
               _buildPriceField(),
               _buildDiscountField(),
+
+
               SizedBox(height: 16.0,),
             ],
           ),

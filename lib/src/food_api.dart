@@ -8,7 +8,6 @@ import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as path;
 
 
-
 getFoods(FoodNotifier foodNotifier) async{
   QuerySnapshot snapshot = await Firestore.instance.collection('Foods')
       .orderBy("createdAt",descending: true)

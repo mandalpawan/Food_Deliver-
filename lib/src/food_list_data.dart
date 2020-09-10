@@ -11,12 +11,14 @@ class Food{
   String Catagory;
   String discription;
   String image;
+  String sale;
 
   Food();
 
   Food.fromMap(Map<String, dynamic> data){
     id = data["id"];
     title = data["title"];
+    sale = data["sale"];
     price = data["price"];
     image = data["image"];
     discount = data["discount"];
@@ -30,6 +32,7 @@ class Food{
     return {
       "id": id,
       'title':title,
+      'sale': sale,
       'price': price,
       'discount':discount,
       'Catagory': Catagory,

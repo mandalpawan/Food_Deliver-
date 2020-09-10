@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery/page/all_page.dart';
+import 'package:food_delivery/provider/user.dart';
+import 'package:provider/provider.dart';
 import 'catagory.dart';
 import 'serch_box.dart';
 import 'food_list.dart';
@@ -12,25 +15,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-
-  Widget _buildFoodItem(){
-    return Container(
-      margin: EdgeInsets.only(bottom: 20.0),
-      child: Bought_item(
-        id: "1",
-        name: "StrawBerry Cheesecake",
-        imagePath: "assets/images/Cakes/cake2.jpg",
-        catagory: "Burger",
-        discount: 50.0,
-        price: 250.0,
-        rating: 150.0,
-      ),
-    );
-  }
+  
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context);
+    print(user.userModel.userType);
     return Scaffold(
       backgroundColor: Colors.white,
       body: ListView(
@@ -45,10 +35,10 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:  <Widget>[
                   Text("What would",
-                    style: TextStyle(fontSize: 30.0,fontWeight: FontWeight.w800),
+                    style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.w800),
                   ),
                   Text("you like to eat?",
-                    style: TextStyle(fontSize: 30.0,fontWeight: FontWeight.w800),
+                    style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.w800),
                   ),
                 ],
               ),
@@ -76,7 +66,13 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               GestureDetector(
-                onTap: (){},
+                onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context){
+                      return AllItem();
+                    }
+                  ));
+                },
                 child: Text(
                   "View All",
                   style: TextStyle(
@@ -92,7 +88,8 @@ class _HomePageState extends State<HomePage> {
           //Frenently Bough Item List
           SizedBox(height: 20.0,),
 
-          _buildFoodItem(),
+          Bought_item(),
+
 
         ],
       ),

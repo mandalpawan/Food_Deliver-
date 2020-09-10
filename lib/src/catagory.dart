@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery/page/catagory.dart';
 
 class horizontal_list extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 101.0,
+      height: 100.0,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[
@@ -29,7 +30,7 @@ class horizontal_list extends StatelessWidget {
           ),
 
           catagory(
-            image_caption: 'Ice-Cream',
+            image_caption: 'IceCream',
             image_location: 'assets/images/Ice_cream/ice_cream_logo.png',
           ),
 
@@ -63,8 +64,15 @@ class catagory extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(2.0),
       child: InkWell(
+        onTap: (){
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context){
+              return CatagoryItem(CatagoryType: image_caption,);
+            }
+          ));
+        },
         child: Container(
-          width: 100.0,
+          width: 85.0,
           child: ListTile(
             title: Image.asset(image_location,
             width: 100.0,

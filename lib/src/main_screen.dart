@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery/provider/user.dart';
 import 'package:food_delivery/src/final_order_page.dart';
 import 'package:food_delivery/src/order_page.dart';
+import 'package:provider/provider.dart';
 
 //Pages importing
 import 'homepage.dart';
@@ -41,6 +43,9 @@ class _Main_screenState extends State<Main_screen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final user = Provider.of<UserProvider>(context);
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -64,8 +69,9 @@ class _Main_screenState extends State<Main_screen> {
             ),
 
             IconButton(
-              onPressed: (){
-                Navigator.of(context).push(MaterialPageRoute(
+              onPressed: () async {
+                await user.getOrders();
+                await Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context){
                    return OrderFinal();
                   }
@@ -203,7 +209,7 @@ class _Main_screenState extends State<Main_screen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart),
-              title: Text("Orders"),
+              title: Text("Cart"),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
