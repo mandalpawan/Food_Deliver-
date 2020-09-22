@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/model/cartitem.dart';
 import 'package:food_delivery/model/order.dart';
+import 'package:food_delivery/page/trace.dart';
 import 'package:food_delivery/provider/user.dart';
 import 'package:provider/provider.dart';
 
@@ -163,6 +164,26 @@ class _OrderFinalState extends State<OrderFinal> {
                                 Text(
                                     'Table No. : 05'
                                 ),
+                                SizedBox(height: 5.0,),
+                                RaisedButton(
+                                  padding: EdgeInsets.symmetric(horizontal: 40.0),
+                                  color: Colors.orangeAccent,
+                                  onPressed: (){
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) {
+                                        return orderTrace();
+                                      }
+                                    ));
+                                  },
+                                  child: Text(
+                                    "Track",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w600
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
                           ),

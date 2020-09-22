@@ -15,6 +15,19 @@ class UserServices{
     return UserModel.fromSnapshot(doc);
   });
 
+  //alluser
+  Future<List<UserModel>> getUsers() async =>
+      _firestore
+          .collection(collection)
+          .getDocuments()
+          .then((result) {
+        List<UserModel> user = [];
+        for (DocumentSnapshot users in result.documents) {
+          user.add(UserModel.fromSnapshot(users));
+        }
+        return user;
+      });
+
   void addToCart({String userId, CartItemModel cartItem}){
       _firestore.collection(collection).document(userId).updateData({
         "cart": FieldValue.arrayUnion([cartItem.toMap()])

@@ -27,7 +27,24 @@ class _OrderState extends State<Order> {
     return Scaffold(
       key: _key,
       backgroundColor: Colors.white,
-      body: app.isLoading ? Loading() : ListView.builder(
+      body: app.isLoading ? Loading() : user.userModel.totalCartPrice < 1 ?
+      Column(
+        mainAxisAlignment:  MainAxisAlignment.center,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.shopping_cart,color: Colors.grey,size: 30,),
+            ],
+          ),
+          SizedBox(
+            height: 15.0,
+          ),
+          Text("Your Cart is empty"),
+        ],
+
+      )
+           : ListView.builder(
           itemCount: user.userModel.cart.length,
           itemBuilder: (_, index) {
 
@@ -128,7 +145,7 @@ class _OrderState extends State<Order> {
               ),
             );
           }),
-      bottomNavigationBar: Container(
+      bottomNavigationBar:(user.userModel.totalCartPrice<1)? null: Container(
         height: 70,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -242,7 +259,8 @@ class _OrderState extends State<Order> {
                                           onPressed: (){
                                             Navigator.of(context).push(MaterialPageRoute(
                                               builder: (BuildContext context){
-                                               return payment();
+                                               //return payment();
+                                                return OrderFrom();
                                               }
                                             ));
                                           },

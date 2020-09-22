@@ -24,8 +24,6 @@ class _FavorateState extends State<Favorate> {
     super.initState();
   }
 
-
-
   void showfoodDetail(){
     showModalBottomSheet(context: context, builder: (context){
       return Container(

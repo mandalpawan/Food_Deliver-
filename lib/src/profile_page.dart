@@ -48,7 +48,7 @@ class _ProfileState extends State<Profile> {
               Text(
                 "Profile",
                 style: TextStyle(
-                  fontSize: 28.0,
+                  fontSize: 25.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -78,16 +78,17 @@ class _ProfileState extends State<Profile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "Pawan",
+                        user.userModel.name.toUpperCase(),
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(height: 10.0,),
+                      SizedBox(height: 8.0,),
                       Text(
-                        "+91 86035 87194",
+                        user.userModel.email.toUpperCase(),
                         style: TextStyle(
+                          fontSize: 12.0,
                           color: Colors.grey,
                           fontWeight: FontWeight.w600,
                         ),

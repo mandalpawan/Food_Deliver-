@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery/page/frequently_bought.dart';
 import 'package:food_delivery/src/food_api.dart';
 import 'package:food_delivery/src/food_notifier.dart';
 import 'package:provider/provider.dart';
 
 class Bought_item extends StatefulWidget {
-  final String id;
-  final String name;
-  final String imagePath;
-  final String catagory;
-  final double price;
-  final double discount;
-  final double rating;
-
-  Bought_item({this.id,this.name,this.imagePath,this.catagory,this.price,this.discount,this.rating});
   @override
   _Bought_itemState createState() => _Bought_itemState();
 }
@@ -39,7 +31,12 @@ class _Bought_itemState extends State<Bought_item> {
       if(foodNotifier.foodList[index].sale == "OnSale"){
         return GestureDetector(
           onTap: (){
-
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) {
+                frequentlyBought();
+                foodNotifier.currentFood = foodNotifier.foodList[index];
+              }
+            ));
           },
           child: Padding(
             padding: const EdgeInsets.only(bottom:8.0),

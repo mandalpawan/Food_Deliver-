@@ -18,6 +18,11 @@ class UserProvider with ChangeNotifier {
   Status _status = Status.Uninitialized;
   UserServices _userServices = UserServices();
   OrderServices _orderServices = OrderServices();
+  int _totalSale = 0;
+  int _totalprocessingItem = 0;
+  int _totalSoldItem = 0;
+  int _totalOrderedItem = 0;
+  int _totalCancelItem = 0;
 
   UserModel _userModel;
 
@@ -28,8 +33,23 @@ class UserProvider with ChangeNotifier {
 
   FirebaseUser get user => _user;
 
+  int get totalSale => _totalSale;
+
+  int get totalprocessingItem => _totalprocessingItem;
+
+  int get totalSoldItem => _totalSoldItem;
+
+  int get totalOrderedItem => _totalOrderedItem;
+
+  int get totalCancelItem => _totalCancelItem;
+
+
   // public variables
   List<OrderModel> orders = [];
+
+  List<OrderModel> ordersAll = [];
+
+  List<UserModel> allUser = [];
 
   UserProvider.initialize() : _auth = FirebaseAuth.instance {
     _auth.onAuthStateChanged.listen(_onStateChanged);
@@ -87,6 +107,13 @@ class UserProvider with ChangeNotifier {
       _user = user;
       _userModel = await _userServices.getUserById(user.uid);
       _status = Status.Authenticated;
+      await getAllOrder();
+      await getTotalSale();
+      await getTotalPendingItem();
+      await getTotalSoldItem();
+      await getTotalOrdered();
+      await getTotalCancelItem();
+      await getAllUser();
     }
     notifyListeners();
   }
@@ -138,6 +165,65 @@ class UserProvider with ChangeNotifier {
     orders = await _orderServices.getUserOrders(userId: _user.uid);
     notifyListeners();
   }
+
+  getAllOrder() async{
+    ordersAll = await _orderServices.getUserOrders();
+    notifyListeners();
+  }
+
+  //get total sold price
+  getTotalSale() async {
+    for(OrderModel order in ordersAll){
+      _totalSale = _totalSale + order.total;
+    }
+    notifyListeners();
+  }
+
+  //get total ordered price
+  getTotalOrdered() async {
+    for(OrderModel order in ordersAll){
+      if(order.status == "0"){
+        _totalOrderedItem = _totalOrderedItem + 1;
+      }
+    }
+
+    notifyListeners();
+  }
+
+  //get total pending item
+  getTotalPendingItem() async {
+    for(OrderModel order in ordersAll){
+      if(order.status == "50"){
+        _totalprocessingItem = _totalprocessingItem + 1;
+      }
+    }
+    notifyListeners();
+  }
+
+  //get total sold item
+  getTotalSoldItem() async {
+    for(OrderModel order in ordersAll){
+      if(order.status == "100"){
+        _totalSoldItem = _totalSoldItem + 1;
+      }
+    }
+    notifyListeners();
+  }
+
+  //get total cancel item
+  getTotalCancelItem() async {
+    for(OrderModel order in ordersAll){
+      if(order.status == "-100"){
+        _totalCancelItem = _totalCancelItem + 1;
+      }
+    }
+    notifyListeners();
+  }
+
+  getAllUser() async{
+    allUser  = await _userServices.getUsers();
+  }
+
 
   Future<void> reloadUserModel()async{
     _userModel = await _userServices.getUserById(user.uid);

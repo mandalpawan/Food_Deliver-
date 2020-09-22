@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_delivery/model/cartitem.dart';
 import 'package:food_delivery/page/order_succes.dart';
 import 'package:food_delivery/provider/app.dart';
@@ -7,6 +8,9 @@ import 'package:food_delivery/services/order.dart';
 import 'package:food_delivery/src/paymentgateway.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+
+
 
 class Payment extends StatefulWidget {
   @override
@@ -14,6 +18,50 @@ class Payment extends StatefulWidget {
 }
 
 class _PaymentState extends State<Payment> {
+  int totalamount = 0;
+  Razorpay _razorpay;
+  @override
+  void initState() {
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _razorpay.clear();
+  }
+  void openCheckout()async{
+    var option = {
+      'key':'rzp_test_5kXTZFKFenELgf',
+      'amount':totalamount*100,
+      'name':'Dartings',
+      'description':'Test Payment',
+      'prefill':{'contact':'','email':''},
+      'external':{
+        'wallets':['paytm']
+      }
+    };
+    try{
+      _razorpay.open(option);
+    }catch(e){
+      debugPrint(e);
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response){
+    Fluttertoast.showToast(msg:"SUCCESS"+ response.paymentId);
+  }
+  void _handlePaymentError(PaymentFailureResponse response){
+    Fluttertoast.showToast(msg:"ERROR"+ response.code.toString() + " - " + response.message);
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response){
+    Fluttertoast.showToast(msg: "External Toast"+ response.walletName);
+  }
 
   final _key = GlobalKey<ScaffoldState>();
   OrderServices _orderServices = OrderServices();
@@ -23,7 +71,9 @@ class _PaymentState extends State<Payment> {
 
     final user = Provider.of<UserProvider>(context);
     final app = Provider.of<AppProvider>(context);
-
+    setState(() {
+      totalamount=user.userModel.totalCartPrice;
+    });
     return Scaffold(
       key: _key,
       appBar: AppBar(
@@ -60,34 +110,10 @@ class _PaymentState extends State<Payment> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.account_balance_wallet,
-                            ),
-                            SizedBox(width: 15.0,),
-                            Text(
-                              "Wallet / UPI",
-                              style: TextStyle(
-                                fontSize: 16.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(height: 10.0,color: Colors.grey,),
-
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
                         child: InkWell(
                           onTap: (){
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext context){
-                                  return payment();
-                                }
-                            ));
+                            openCheckout();
                           },
-
 
                           child: Row(
                             children: <Widget>[
@@ -96,7 +122,7 @@ class _PaymentState extends State<Payment> {
                               ),
                               SizedBox(width: 15.0,),
                               Text(
-                                "Credit / Debit Card",
+                                "Online Payment",
                                 style: TextStyle(
                                   fontSize: 16.0,
                                 ),

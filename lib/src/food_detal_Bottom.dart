@@ -28,11 +28,6 @@ class _foodDetailState extends State<foodDetail> {
     final user = Provider.of<UserProvider>(context);
     final app = Provider.of<AppProvider>(context);
 
-    _onFoodUploaded(CardModel cart) {
-      CartNotifier cartNotifier = Provider.of<CartNotifier>(context, listen: false);
-      cartNotifier.addCardModel(cart);
-      Navigator.pop(context);
-    }
 
     return Scaffold(
       key: _key,

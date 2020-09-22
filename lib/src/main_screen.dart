@@ -87,8 +87,8 @@ class _Main_screenState extends State<Main_screen> {
             children: <Widget>[
               //Header
               UserAccountsDrawerHeader(
-                accountName: Text("Pawan Mandal"),
-                accountEmail: Text("Pawanmanmdal121@gmail.com"),
+                accountName: Text(user.userModel.name.toUpperCase()),
+                accountEmail: Text(user.userModel.email.toUpperCase()),
                 currentAccountPicture: GestureDetector(
                   child: CircleAvatar(
                     backgroundColor: Colors.white,
