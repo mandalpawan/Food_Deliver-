@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/page/catagory.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 class horizontal_list extends StatelessWidget {
   @override
@@ -10,38 +12,28 @@ class horizontal_list extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         children: <Widget>[
           catagory(
-            image_caption: 'Burger',
-            image_location: 'assets/images/Burger/burger_logo.png',
+            image_caption: 'Thali',
+            image_location: 'assets/images/breakfast.png',
           ),
 
           catagory(
-            image_caption: 'Cakes',
-            image_location: 'assets/images/Cakes/cake_logo.png',
+            image_caption: 'Chinese',
+            image_location: 'assets/images/china.jpg',
           ),
 
           catagory(
-            image_caption: 'Chanies',
-            image_location: 'assets/images/Chanies/chines_logo.png',
+            image_caption: 'Refreshment',
+            image_location: 'assets/images/refresh.jpg',
           ),
 
           catagory(
-            image_caption: 'Fast Food',
-            image_location: 'assets/images/Fast_food/fast_food_logo.png',
+            image_caption: 'Snacks',
+            image_location: 'assets/images/snacks.png',
           ),
 
           catagory(
-            image_caption: 'IceCream',
-            image_location: 'assets/images/Ice_cream/ice_cream_logo.png',
-          ),
-
-          catagory(
-            image_caption: 'Pizza',
-            image_location: 'assets/images/Pizza/pizza_logo.png',
-          ),
-
-          catagory(
-            image_caption: 'South',
-            image_location: 'assets/images/South_Indian/south_indian_logo.png',
+            image_caption: 'Desserts',
+            image_location: 'assets/images/dessrts.png',
           ),
         ],
       ),
@@ -72,15 +64,22 @@ class catagory extends StatelessWidget {
           ));
         },
         child: Container(
-          width: 85.0,
+          width: 100.0,
           child: ListTile(
             title: Image.asset(image_location,
             width: 100.0,
-            height: 80.0,),
+            height: 75.0,),
             subtitle: Container(
               alignment: Alignment.topCenter,
-              child: Text(
-                image_caption
+              child: Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  image_caption,
+                  style: GoogleFonts.robotoMono(
+                    fontSize: 11.0,
+                    color: Colors.black
+                  ),
+                ),
               ),
             ),
           ),

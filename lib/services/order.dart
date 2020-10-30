@@ -8,7 +8,7 @@ class OrderServices{
   String collection = "orders";
   Firestore _firestore = Firestore.instance;
 
-  void createOrder({String userId ,String id,String description,String status ,List<CartItemModel> cart, int totalPrice}) {
+  void createOrder({String userId ,String id,String description,String status ,List<CartItemModel> cart, int totalPrice,String name,String mobile,String table}) {
     List<Map> convertedCart = [];
 
     for(CartItemModel item in cart){
@@ -23,7 +23,10 @@ class OrderServices{
       "total": totalPrice,
       "createdAt": DateTime.now(),
       "description": description,
-      "status": status
+      "status": status,
+      'name':name,
+      'mobile':mobile,
+      'table': table
     });
   }
 
@@ -39,4 +42,15 @@ class OrderServices{
         }
         return orders;
       });
+
+  void  updateOrder({ String uid ,String  status }) async =>
+      _firestore.collection(collection)
+          .document(uid)
+          .updateData({'status': (int.parse(status) + 50).toString() });
+
+  void  CancelOrder({ String uid ,String  status }) async =>
+      _firestore.collection(collection)
+          .document(uid)
+          .updateData({'status': (int.parse(status) - 100).toString() });
+
 }

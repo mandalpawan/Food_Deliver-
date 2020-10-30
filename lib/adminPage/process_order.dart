@@ -6,12 +6,12 @@ import 'package:food_delivery/provider/user.dart';
 import 'package:food_delivery/services/order.dart';
 import 'package:provider/provider.dart';
 
-class OrderItem extends StatefulWidget {
+class process_order extends StatefulWidget {
   @override
-  _OrderItemState createState() => _OrderItemState();
+  _process_orderState createState() => _process_orderState();
 }
 
-class _OrderItemState extends State<OrderItem> {
+class _process_orderState extends State<process_order> {
   @override
   Widget build(BuildContext context) {
 
@@ -19,6 +19,7 @@ class _OrderItemState extends State<OrderItem> {
     final appload = Provider.of<AppProvider>(context);
 
     user.getAllOrder();
+
 
     OrderServices orderService =  OrderServices();
 
@@ -73,7 +74,7 @@ class _OrderItemState extends State<OrderItem> {
               itemBuilder: (_, index){
                 OrderModel _order = user.ordersAll[index];
 
-                if(user.ordersAll[index].status ==0.toString()){
+                if(user.ordersAll[index].status ==50.toString()){
                   return Column(
                       children:<Widget>[
                         Card(
@@ -193,7 +194,7 @@ class _OrderItemState extends State<OrderItem> {
                                         appload.changeIsLoading();
                                       },
                                       child: Text(
-                                        "Add To Process",
+                                        "Deliver",
                                         style: TextStyle(
                                           color: Colors.white,
                                         ),

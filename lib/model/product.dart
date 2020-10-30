@@ -6,6 +6,7 @@ class ProductModel {
   static const PRICE = "price";
   static const DISCOUNT = "discount";
   static const DISCRIPTION = "discription";
+  static const CATAGORY = "Catagory";
   static const PRODUCT_ID = "id";
   static const IMAGE = "image";
 
@@ -17,6 +18,7 @@ class ProductModel {
   String _discription;
   String _id;
   String _image;
+  String _Catagory;
 
 
 
@@ -27,6 +29,7 @@ class ProductModel {
 
   String get discount => _discount;
   String get discription => _discription;
+  String get Catagory => _Catagory;
   String get id => _id;
   String get image => _image;
 
@@ -37,6 +40,7 @@ class ProductModel {
     _price = snapshot.data[PRICE];
     _discount = snapshot.data[DISCOUNT];
     _discription = snapshot.data[DISCRIPTION];
+    _Catagory = snapshot.data[CATAGORY];
     _id = snapshot.data[PRODUCT_ID];
     _image = snapshot.data[IMAGE];
   }

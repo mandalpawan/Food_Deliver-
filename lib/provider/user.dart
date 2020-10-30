@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/model/cartitem.dart';
 import 'package:food_delivery/model/order.dart';
+import 'package:food_delivery/model/product.dart';
 import 'package:food_delivery/model/user.dart';
 import 'package:food_delivery/services/order.dart';
 import 'package:food_delivery/services/user.dart';
@@ -93,11 +94,19 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future signOut() async {
+  Future signOut()async{
     _auth.signOut();
     _status = Status.Unauthenticated;
     notifyListeners();
     return Future.delayed(Duration.zero);
+  }
+
+  void changePassword(String password) async{
+    user.updatePassword(password).then((_){
+      print("Succesfull changed password");
+    }).catchError((error){
+      print("Password can't be changed" + error.toString());
+    });
   }
 
   Future<void> _onStateChanged(FirebaseUser user) async {
@@ -148,6 +157,49 @@ class UserProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> addToCartbySearch(
+      {ProductModel  product,String quantity}) async {
+    try {
+      var uuid = Uuid();
+      String cartItemId = uuid.v4();
+      List<CartItemModel> cart = _userModel.cart;
+
+      Map cartItem = {
+        "id": cartItemId,
+        "name": product.title,
+        "image": product.image,
+        "productId": product.id,
+        "price": product.price,
+        "discount": product.discount,
+        "discription": product.discription,
+        "quantity": quantity,
+      };
+
+      CartItemModel item = CartItemModel.fromMap(cartItem);
+//      if(!itemExists){
+      print("CART ITEMS ARE: ${cart.toString()}");
+      _userServices.addToCart(userId: _user.uid, cartItem: item);
+//      }
+
+      return true;
+    } catch (e) {
+      print("THE ERROR ${e.toString()}");
+      return false;
+    }
+  }
+
+  Future<bool> updateToCard(List cartItem) async {
+    try {
+      bool itemExists = true;
+      if(itemExists) {
+        _userServices.updateToCart(userId: _user.uid, cartItem: cartItem);
+      }return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<bool> removeFromCart({CartItemModel cartItem})async{
     print("THE PRODUC IS: ${cartItem.toString()}");
 

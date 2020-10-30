@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:food_delivery/model/product.dart';
+import 'package:food_delivery/page/show_detail_search.dart';
 import 'package:food_delivery/provider/product.dart';
 import 'package:provider/provider.dart';
 
@@ -35,19 +36,26 @@ class _productsearchState extends State<productsearch> {
           },
         ),
       ),
+
       body: productProvider.productsSearched.length < 1 ? Column(
         mainAxisAlignment:  MainAxisAlignment.center,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.search,color: Colors.grey,size: 30,),
+              Icon(Icons.search,color: Colors.grey,size: 40,),
             ],
           ),
           SizedBox(
             height: 15.0,
           ),
-          Text("No Items")
+          Text(
+              "No Items",
+            style: TextStyle(
+              fontSize: 20.0,
+              color: Colors.grey
+            ),
+          )
         ],
 
       ) : ListView.separated(
@@ -110,10 +118,19 @@ class _productsearchState extends State<productsearch> {
                           RaisedButton(
                             color: Colors.orangeAccent,
                             onPressed: (){
-                             // Navigator.of(context).push(MaterialPageRoute(
-                               //   builder: (context) =>
-                                //      ProductDetail( productProvider.productsSearched[index].name, productProvider.productsSearched[index].price.toString(), productProvider.productsSearched[index].picture, productProvider.productsSearched[index].category,productProvider.productsSearched[index].id,productProvider.products[index].description,productProvider.products[index].id,productProvider.products[index].stock,productProvider.products[index].quans)
-                             // ));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+
+
+                                     /* searchfoodDetail(title: productProvider.productsSearched[index].title,
+                                        image: productProvider.productsSearched[index].image,
+                                        discription:productProvider.productsSearched[index].discription ,
+                                      price: productProvider.productsSearched[index].price,
+                                      id: productProvider.productsSearched[index].id,catagory: productProvider.productsSearched[index].Catagory,)*/
+                                  searchfoodDetail(product: productProvider.productsSearched[index])
+
+                              )
+                              );
                             },
                             child: Text(
                               "ADD",

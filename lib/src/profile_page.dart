@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery/page/chnagepswd.dart';
 import 'package:food_delivery/provider/user.dart';
 import 'package:food_delivery/src/edit_form.dart';
 import 'package:food_delivery/src/loding_page.dart';
@@ -157,20 +158,29 @@ class _ProfileState extends State<Profile> {
                       Divider(height: 10.0,color: Colors.grey,),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.visibility,
-                              color: Colors.blue,
-                            ),
-                            SizedBox(width: 15.0,),
-                            Text(
-                              "Change Password",
-                              style: TextStyle(
-                                fontSize: 16.0,
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context){
+                               return TimerApp();
+                              }
+                            ));
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.visibility,
+                                color: Colors.blue,
                               ),
-                            ),
-                          ],
+                              SizedBox(width: 15.0,),
+                              Text(
+                                "Change Password",
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Divider(height: 10.0,color: Colors.grey,),
@@ -282,7 +292,7 @@ class _ProfileState extends State<Profile> {
               SizedBox(height: 20.0,),
 
               GestureDetector(
-                onTap: () async {
+                onTap: () {
                   user.signOut();
                 },
                 child: Container(

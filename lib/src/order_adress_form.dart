@@ -109,6 +109,8 @@ class _OrderFromState extends State<OrderFrom> {
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return "The name field cannot be empty";
+                                  } if (value.length != 10) {
+                                    return "Number is invalid";
                                   }
                                   return null;
                                 },
@@ -137,6 +139,8 @@ class _OrderFromState extends State<OrderFrom> {
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return "The name field cannot be empty";
+                                  }if (value.length != 1) {
+                                    return "Invalid table Number";
                                   }
                                   return null;
                                 },
@@ -158,7 +162,7 @@ class _OrderFromState extends State<OrderFrom> {
                                 if(_formKey.currentState.validate()) {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context){
-                                      return Payment();
+                                      return Payment(Name:_name.text ,mobile: _mobile.text,table_no: _table.text,);
                                     }
                                   ));
                                 }

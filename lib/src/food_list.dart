@@ -30,14 +30,15 @@ class _Bought_itemState extends State<Bought_item> {
       itemBuilder: (BuildContext context,int index){
       if(foodNotifier.foodList[index].sale == "OnSale"){
         return GestureDetector(
-          onTap: (){
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) {
-                frequentlyBought();
-                foodNotifier.currentFood = foodNotifier.foodList[index];
-              }
-            ));
-          },
+            onTap: () {
+              foodNotifier.currentFood = foodNotifier.foodList[index];
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return frequentlyBought();
+                  }
+                  )
+              );
+            },
           child: Padding(
             padding: const EdgeInsets.only(bottom:8.0),
             child: ClipRRect(

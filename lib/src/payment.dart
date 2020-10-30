@@ -13,6 +13,12 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 
 class Payment extends StatefulWidget {
+  String Name;
+  String mobile;
+  String table_no;
+
+  Payment({this.Name,this.mobile,this.table_no});
+
   @override
   _PaymentState createState() => _PaymentState();
 }
@@ -146,9 +152,12 @@ class _PaymentState extends State<Payment> {
                                 userId: user.user.uid,
                                 id: id,
                                 description: "Some random description",
-                                status: "complete",
+                                status: "0",
                                 totalPrice: user.userModel.totalCartPrice,
-                                cart: user.userModel.cart
+                                cart: user.userModel.cart,
+                                name: widget.Name,
+                                mobile: widget.mobile,
+                                table: widget.table_no
                             );
                             for(CartItemModel cartItem in user.userModel.cart){
                               bool value = await user.removeFromCart(cartItem: cartItem);
@@ -167,11 +176,16 @@ class _PaymentState extends State<Payment> {
                             );
                             app.changeIsLoading();
 
-                            Navigator.of(context).push(MaterialPageRoute(
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+
+
+                           /* Navigator.of(context).push(MaterialPageRoute(
                                 builder: (BuildContext context){
                                   return OrderSuccess();
                                 }
-                            ));
+                            ));*/
                           },
                           child: Container(
                             child: Row(

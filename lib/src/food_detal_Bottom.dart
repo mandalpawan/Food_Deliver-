@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/provider/app.dart';
 import 'package:food_delivery/provider/user.dart';
-import 'package:food_delivery/src/card_database.dart';
-import 'package:food_delivery/src/card_model.dart';
-import 'package:food_delivery/src/cart_notifier.dart';
 import 'package:food_delivery/src/food_notifier.dart';
-import 'package:food_delivery/src/user_model.dart';
 import 'package:provider/provider.dart';
-import 'package:food_delivery/src/card_database.dart';
 
 
 class foodDetail extends StatefulWidget {
@@ -41,7 +36,7 @@ class _foodDetailState extends State<foodDetail> {
               children: <Widget>[
                 IconButton(
                   icon: Icon(
-                      Icons.remove_circle,
+                    Icons.remove_circle,
                     color: Colors.orangeAccent,
                     size: 30.0,
                   ),
@@ -60,8 +55,8 @@ class _foodDetailState extends State<foodDetail> {
                 Text(
                   quantity.toString(),
                   style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold
                   ),
                 ),
 
@@ -69,7 +64,7 @@ class _foodDetailState extends State<foodDetail> {
 
                 IconButton(
                   icon: Icon(
-                      Icons.add_circle,
+                    Icons.add_circle,
                     color: Colors.orangeAccent,
                     size: 30.0,
                   ),
@@ -90,31 +85,59 @@ class _foodDetailState extends State<foodDetail> {
               color: Colors.orangeAccent,
               padding: EdgeInsets.symmetric(vertical: 5.0,horizontal: 40.0),
               onPressed: () async {
+
+                /*
+                {
+                  app.changeIsLoading();
+                  int k=user.userModel.cart.length;
+                  var check = "false";
+                  if(k!=0){
+                    for(int i=0;i<k;i++){
+                      if(user.userModel.cart[i]["name"]==widget.name){
+                        user.userModel.cart[i]["quantity"]=user.userModel.cart[i]["quantity"] + 1;
+                        user.updateToCard(user.userModel.cart);
+                        user.reloadUserModel();
+                        check="true";
+                      }
+                    }
+                  }
+                  if(check!="true"){
+                    user.addToCard(widget.name,widget.price,widget.image,widget.productId,_valu,widget.stock);
+                    user.reloadUserModel();
+                  }
+                  app.changeIsLoading();
+                  _showSnackbar();
+                }
+
+                 */
+
+
+
                 app.changeIsLoading();
                 bool value =  await user.addToCart(product: foodNotifier.currentFood,quantity: quantity.toString());
-                  if(value){
+                if(value){
                   print("Item added to cart");
                   _key.currentState.showSnackBar(
-                  SnackBar(content: Text("Added ro Cart!"))
+                      SnackBar(content: Text("Added ro Cart!"))
                   );
                   user.reloadUserModel();
                   app.changeIsLoading();
                   Navigator.of(context).pop();
                   return;
-                  } else{
+                } else{
                   print("Item NOT added to cart");
 
-                  }
+                }
 
 
               },
               child: totalPrice == 0 ?
               Text(
-                  "Add Cart \n"+ "\u20B9 " +  foodNotifier.currentFood.price,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
+                "Add Cart \n"+ "\u20B9 " +  foodNotifier.currentFood.price,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
                 ),
               ):
               Text(
@@ -142,7 +165,7 @@ class _foodDetailState extends State<foodDetail> {
                       Navigator.pop(context);
                     },
                     icon: Icon(
-                        Icons.clear,
+                      Icons.clear,
                       size: 30,
                     ),
                   ),
@@ -177,18 +200,18 @@ class _foodDetailState extends State<foodDetail> {
                   Text(
                     "\u20B9 "+ foodNotifier.currentFood.price,
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.orangeAccent
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                        color: Colors.orangeAccent
                     ),
                   ),
                 ],
               ),
 
               Text(
-                 foodNotifier.currentFood.discription,
+                foodNotifier.currentFood.discription,
                 style: TextStyle(
-                    fontSize: 16.0,
+                  fontSize: 16.0,
                 ),
               ),
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/adminPage/orders.dart';
+import 'package:food_delivery/adminPage/process_order.dart';
 import 'package:food_delivery/provider/user.dart';
 import 'package:food_delivery/src/food_api.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,13 @@ class _AdminDeshBoardState extends State<AdminDeshBoard> {
     FoodNotifier foodNotifier = Provider.of<FoodNotifier>(context, listen: false);
     getFoods(foodNotifier);
     super.initState();
+  }
+
+  Future<Null> refreshpage() async {
+    await Future.delayed(Duration(seconds: 2));
+    final user = Provider.of<UserProvider>(context,listen: false);
+    user.totalSale.toString();
+    user.totalOrderedItem.toString();
   }
 
 
@@ -64,7 +72,11 @@ class _AdminDeshBoardState extends State<AdminDeshBoard> {
           elevation: 0.0,
           backgroundColor: Colors.white,
         ),
-        body: _loadScreen());
+        body: RefreshIndicator(
+            child: _loadScreen(),
+                onRefresh: refreshpage,
+        )
+    );
   }
 
   Widget _loadScreen() {
@@ -172,7 +184,13 @@ class _AdminDeshBoardState extends State<AdminDeshBoard> {
                     child: Card(
                       child: ListTile(
                           title: FlatButton.icon(
-                              onPressed: (){},
+                              onPressed: (){
+                                Navigator.of(context).push(MaterialPageRoute(
+                                   builder: (BuildContext context){
+                                      return process_order();
+                                    }
+                                ));
+                              },
                               icon: Icon(Icons.category),
                               label: Text("Process")),
                           subtitle: Text(
@@ -251,7 +269,7 @@ class _AdminDeshBoardState extends State<AdminDeshBoard> {
             Divider(),
             GestureDetector(
               onTap: () async {
-                user.signOut();
+                await user.signOut();
               },
               child: Container(
                 margin: EdgeInsets.only(bottom: 25.0),

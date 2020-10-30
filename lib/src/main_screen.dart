@@ -39,7 +39,9 @@ class _Main_screenState extends State<Main_screen> {
     pages = [homePage,favorite,order,profile];
 
     currentPage = homePage;
+
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -224,11 +226,15 @@ class _Main_screenState extends State<Main_screen> {
   }
 
     Widget _buildShoppingCart(){
+
+      final user = Provider.of<UserProvider>(context);
+
      return Stack(
        children: <Widget>[
          Icon(Icons.shopping_basket,
            color: Theme.of(context).primaryColor,
          ),
+         /*
          Positioned(
            top: 0.0,
            right: 0.0,
@@ -240,7 +246,7 @@ class _Main_screenState extends State<Main_screen> {
                color: Colors.red,
              ),
              child: Center(
-               child: Text("1",
+               child: Text(user.orders.length.toString(),
                style: TextStyle(
                  color: Colors.white,
                  fontSize: 12.0,
@@ -249,6 +255,7 @@ class _Main_screenState extends State<Main_screen> {
              ),
            ),
          ),
+         */
        ],
      );
     }

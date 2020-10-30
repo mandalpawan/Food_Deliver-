@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery/model/cartitem.dart';
 import 'package:food_delivery/model/order.dart';
 import 'package:food_delivery/page/trace.dart';
 import 'package:food_delivery/provider/user.dart';
@@ -165,13 +164,22 @@ class _OrderFinalState extends State<OrderFinal> {
                                     'Table No. : 05'
                                 ),
                                 SizedBox(height: 5.0,),
+                                user.orders[index].status == "-100" ?
+                                Text(
+                                    "Cancel",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                ):
                                 RaisedButton(
                                   padding: EdgeInsets.symmetric(horizontal: 40.0),
                                   color: Colors.orangeAccent,
                                   onPressed: (){
                                     Navigator.of(context).push(MaterialPageRoute(
                                       builder: (_) {
-                                        return orderTrace();
+                                        return trackOrderPage(user.orders[index].status,user.orders[index].id);
                                       }
                                     ));
                                   },

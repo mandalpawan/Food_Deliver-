@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:food_delivery/src/food_api.dart';
+import 'package:food_delivery/src/food_detal_Bottom.dart';
 import 'package:food_delivery/src/food_notifier.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,15 @@ class _CatagoryItemState extends State<CatagoryItem> {
     FoodNotifier foodNotifier = Provider.of<FoodNotifier>(context,listen: false);
     getFoods(foodNotifier);
     super.initState();
+  }
+
+  void showfoodDetail(){
+    showModalBottomSheet(context: context, builder: (context){
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 20.0),
+        child: foodDetail(),
+      );
+    });
   }
 
   //String imageCaption
@@ -115,7 +125,7 @@ class _CatagoryItemState extends State<CatagoryItem> {
                               RaisedButton(
                                 color: Colors.orangeAccent,
                                 onPressed: (){
-                                  //showfoodDetail();
+                                  showfoodDetail();
                                   foodNotifier.currentFood = foodNotifier.foodList[index];
                                 },
                                 child: Text(

@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:food_delivery/adminPage/loading_page_admin.dart';
 import 'package:food_delivery/src/food_list_data.dart';
 import 'package:food_delivery/src/food_notifier.dart';
-import 'package:food_delivery/src/sigin_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -27,11 +27,11 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
   String _imageUrl;
   File _imageFile;
 
-  var _FoodListCatagory = ["Fast Food", "Burger","Pizza","Chanies","South","IceCream"];
+  var _FoodListCatagory = ["Thali", "Chinese","Refreshment","Snacks","Desserts"];
 
   var _FoodListSale = ["OnSale", "Not Sale"];
 
-  var _currentFoodCatagoryList = "Fast Food";
+  var _currentFoodCatagoryList = "Thali";
   var _currentFoodSaleList = "Not Sale" ;
 
   @override
@@ -115,6 +115,7 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
   _onFoodUploaded(Food food) {
     FoodNotifier foodNotifier = Provider.of<FoodNotifier>(context, listen: false);
     foodNotifier.addFood(food);
+    Navigator.pop(context);
     Navigator.pop(context);
   }
 
@@ -261,17 +262,22 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
       return;
     }
     _formkey.currentState.save();
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context){
+          return LoadingPage();
+        }
+    ));
 
     uploadFoodAndImage(_currentFood, widget.isUpdating , _imageFile,_onFoodUploaded);
 
 
-    print("name: ${_currentFood.title}");
-    print("CatagoryDrop: ${_currentFood.Catagory}");
-    print("CatagoryDropsale: ${_currentFood.sale}");
-    print("Catagory: ${_currentFood.discription}");
-    print("Catagory: ${_currentFood.price}");
-    print("Catagory: ${_currentFood.discount}");
-    print("Catagory: ${_currentFood.image}");
+    //print("name: ${_currentFood.title}");
+   // print("CatagoryDrop: ${_currentFood.Catagory}");
+    //print("CatagoryDropsale: ${_currentFood.sale}");
+   // print("Catagory: ${_currentFood.discription}");
+   // print("Catagory: ${_currentFood.price}");
+   // print("Catagory: ${_currentFood.discount}");
+   // print("Catagory: ${_currentFood.image}");
   }
 
   @override

@@ -63,12 +63,6 @@ class UserModel {
 
     int total = _priceSum;
 
-    print("THE TOTAL IS $total");
-    print("THE TOTAL IS $total");
-    print("THE TOTAL IS $total");
-    print("THE TOTAL IS $total");
-    print("THE TOTAL IS $total");
-
     return total;
   }
 

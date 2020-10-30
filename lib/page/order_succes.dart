@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery/src/main_screen.dart';
-
+import 'package:food_delivery/src/final_order_page.dart';
 
 class OrderSuccess extends StatelessWidget {
   @override
@@ -44,7 +43,7 @@ class OrderSuccess extends StatelessWidget {
               onPressed: (){
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context){
-                    return Main_screen();
+                    return OrderFinal();
                   }
                 ));
               },

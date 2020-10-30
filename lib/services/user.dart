@@ -39,4 +39,11 @@ class UserServices{
       "cart": FieldValue.arrayRemove([cartItem.toMap()])
     });
   }
+
+  void updateToCart({String userId,List cartItem}){
+    _firestore.collection(collection).document(userId).updateData({
+      "cart":cartItem
+    });
+  }
+
 }
