@@ -28,7 +28,6 @@ class _Bought_itemState extends State<Bought_item> {
       shrinkWrap: true,
         physics: ClampingScrollPhysics(),
       itemBuilder: (BuildContext context,int index){
-      if(foodNotifier.foodList[index].sale == "OnSale"){
         return GestureDetector(
             onTap: () {
               foodNotifier.currentFood = foodNotifier.foodList[index];
@@ -43,8 +42,8 @@ class _Bought_itemState extends State<Bought_item> {
             padding: const EdgeInsets.only(bottom:8.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
-              child: Stack(
-                children: <Widget>[
+              child: Column(
+                children: [
                   Container(
                     height: 200.0,
                     width: 350.0,
@@ -54,91 +53,51 @@ class _Bought_itemState extends State<Bought_item> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  Positioned(
-                    left: 0.0,
-                    bottom: 0.0,
-                    child: Container(
-                      height: 60.0,
-                      width: 350.0,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.black,Colors.black54,
-                            ],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.bottomCenter,
-                          )
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            foodNotifier.foodList[index].title,
+                            style: TextStyle(
+                              color: Colors.brown,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
+                            ),
+                          ),
+
+                        ],
                       ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 10.0,
-                    bottom: 10.0,
-                    right: 10.0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              foodNotifier.foodList[index].title,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0,
-                              ),
+                      Column(
+                        children: <Widget>[
+                          Text(
+                            "Price",
+                            style: TextStyle(
+                              color: Colors.brown,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
                             ),
-                            Row(
-                              children: <Widget>[
-                                Icon(Icons.star,color: Theme.of(context).primaryColor,size: 16.0,),
-                                Icon(Icons.star,color: Theme.of(context).primaryColor,size: 16.0,),
-                                Icon(Icons.star,color: Theme.of(context).primaryColor,size: 16.0,),
-                                Icon(Icons.star,color: Theme.of(context).primaryColor,size: 16.0,),
-                                Icon(Icons.star,color: Theme.of(context).primaryColor,size: 16.0,),
-                                SizedBox(width: 20.0,),
-                                Text(
-                                  ("120  Reviews"),
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ],
+                          ),
+                          Text(
+                            "Rs. " + foodNotifier.foodList[index].price,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.brown,
                             ),
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Text(
-                              "Price",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0,
-                              ),
-                            ),
-                            Text(
-                              "Rs. " + foodNotifier.foodList[index].price,
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.orangeAccent,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
           ),
         );
-      }else{
-        return SizedBox();
-      }
-
       },
 
       separatorBuilder: (BuildContext context,int index){

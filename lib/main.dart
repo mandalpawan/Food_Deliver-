@@ -4,7 +4,7 @@ import 'package:food_delivery/page/spash.dart';
 import 'package:food_delivery/provider/app.dart';
 import 'package:food_delivery/provider/product.dart';
 import 'package:food_delivery/provider/user.dart';
-import 'package:food_delivery/src/admin_deshboard.dart';
+
 import 'package:food_delivery/src/food_notifier.dart';
 import 'package:food_delivery/src/main_screen.dart';
 import 'package:provider/provider.dart';
@@ -32,16 +32,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primaryColor: Colors.orangeAccent
+          primaryColor: Colors.brown
       ),
       home: ScreensController(),
     );
   }
 }
-
-
-
-
 
 
 class ScreensController extends StatelessWidget {
@@ -56,7 +52,7 @@ class ScreensController extends StatelessWidget {
       case Status.Authenticating:
         return Login();
       case Status.Authenticated:
-        return  user.userModel.userType == "admin"?  AdminDeshBoard() : Main_screen();
+        return   Main_screen() ;
         //return AdminDeshBoard();
       default: return Login();
     }

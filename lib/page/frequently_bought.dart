@@ -1,12 +1,12 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:food_delivery/page/loading.dart';
-import 'package:food_delivery/provider/app.dart';
-import 'package:food_delivery/provider/user.dart';
 import 'package:food_delivery/src/food_notifier.dart';
 
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class frequentlyBought extends StatefulWidget {
   @override
@@ -19,29 +19,44 @@ class _frequentlyBoughtState extends State<frequentlyBought> {
   int quantity = 1;
   int totalPrice = 0;
 
-  _showSnackbar(){
-    print("Item Added to Cart");
-    final snackBar = new SnackBar(content: new Text("Item added to cart"),
-      duration: new Duration(seconds: 3),
-      backgroundColor: Colors.green,
-    );
-    _scaffoldkey.currentState.showSnackBar(snackBar);
-  }
-
-
-
   @override
   Widget build(BuildContext context) {
 
-    final user = Provider.of<UserProvider>(context);
-    final app = Provider.of<AppProvider>(context);
     FoodNotifier foodNotifier = Provider.of<FoodNotifier>(context);
+
+    void customLaunch(command) async {
+      if (await canLaunch(command)) {
+        await launch(command);
+      } else {
+        print(' could not launch $command');
+      }
+    }
+
+    void launchWhatsApp({@required String phone, @required String message, }) async {
+      String url() {
+        if (Platform.isIOS) {
+          return "whatsapp://wa.me/$phone/?text=${Uri.parse(message)}";
+        } else {
+          return "whatsapp://send? phone=$phone&text=${Uri.parse(message)}";
+        }
+      }
+      if (await canLaunch(url())) {
+        await launch(url());
+      } else {
+        throw 'Could not launch ${url()}';
+      }
+    }
+
+    void whatsappmessage(phone) async{
+      var whatsappUrl ="whatsapp://send?phone=$phone";
+      await canLaunch(whatsappUrl)? launch(whatsappUrl):print("open whatsapp app link or do a snackbar with notification that there is no whatsapp installed");
+    }
 
     return Scaffold(
       key: _scaffoldkey,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.brown,
         elevation: 0.0,
         title: Text(
             foodNotifier.currentFood.title,
@@ -50,162 +65,138 @@ class _frequentlyBoughtState extends State<frequentlyBought> {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        height: 150.0,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    Icons.remove_circle,
-                    color: Colors.orangeAccent,
-                    size: 40.0,
-                  ),
-                  onPressed: (){
-                    setState(() {
-                      if(quantity>1 ){
-                        quantity -= 1;
-                        totalPrice = quantity * int.parse(foodNotifier.currentFood.price);
-                      }
-                    });
-                  },
-                ),
-
-                SizedBox(width: 15.0,),
-
-                Text(
-                  quantity.toString(),
-                  style: TextStyle(
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.bold
-                  ),
-                ),
-
-                SizedBox(width: 15.0,),
-
-                IconButton(
-                  icon: Icon(
-                    Icons.add_circle,
-                    color: Colors.orangeAccent,
-                    size: 40.0,
-                  ),
-                  onPressed: (){
-                    setState(() {
-                      if(quantity<10){
-                        quantity += 1;
-                        totalPrice = quantity * int.parse(foodNotifier.currentFood.price);
-                      }
-                    });
-
-                  },
-                ),
-              ],
-            ),
-
-            SizedBox(height: 20.0,),
-            FlatButton(
-              color: Colors.orangeAccent,
-              child: RaisedButton(
-                color: Colors.orangeAccent,
-                padding: EdgeInsets.symmetric(horizontal: 23.0,vertical: 10.0),
-                onPressed: () async {
-                  app.changeIsLoading();
-                  bool value =  await user.addToCart(product: foodNotifier.currentFood,quantity: quantity.toString());
-                  if(value){
-                    print("Item added to cart");
-                    _scaffoldkey.currentState.showSnackBar(
-                        SnackBar(content: Text("Added ro Cart!"))
-                    );
-                    user.reloadUserModel();
-                    app.changeIsLoading();
-                    Navigator.of(context).pop();
-                    return;
-                  } else{
-                    print("Item NOT added to cart");
-
-                  }
-                },
-                child:app.isLoading ?Loading() : Text(
-                  "Add to Cart",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-
-          ],
-        ),
-      ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.only(topLeft: Radius.zero,topRight: Radius.zero,bottomLeft: Radius.circular(120),bottomRight: Radius.circular(120)),
-              child: Container(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
                 width: MediaQuery.of(context).size.width,
                 height: 200.0,
-                color: Colors.orangeAccent,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      bottom: 5.0,
-                      right: 110.0,
-                      child: CircleAvatar(
-                        maxRadius: (70.0),
-                        backgroundImage: NetworkImage(
-                           foodNotifier.currentFood.image == null ?'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg' :
-                           foodNotifier.currentFood.image
-                        ),
-                      ),
-                    ),
-                  ],
+                color: Colors.brown,
+                child: Image.network(
+                     foodNotifier.currentFood.image == null ?'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg' :
+                     foodNotifier.currentFood.image
+
                 ),
               ),
-            ),
-            SizedBox(height: 15.0,),
-            Text(
-              foodNotifier.currentFood.title,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 15.0,),
-            Text(
-             foodNotifier.currentFood.Catagory,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 15.0,),
-            Text(
-              "\u20B9 "+ foodNotifier.currentFood.price,
-              style: TextStyle(
+              SizedBox(height: 15.0,),
+              Text(
+                foodNotifier.currentFood.title,
+                style: TextStyle(
                   fontSize: 20.0,
-                  color: Colors.grey
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-
-            SizedBox(height: 15.0,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50.0),
-              child: Text(
-                foodNotifier.currentFood.discription,
+              SizedBox(height: 10.0,),
+              Text(
+               foodNotifier.currentFood.Catagory,
                 style: TextStyle(
                   fontSize: 16.0,
-                  color: Colors.grey,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 10.0,),
+              Text(
+                "\u20B9 "+ foodNotifier.currentFood.price,
+                style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.brown
+                ),
+              ),
+
+              SizedBox(height: 10.0,),
+              Text(
+                foodNotifier.currentFood.discription,
+                style: TextStyle(
+                  fontSize: 18.0,
+                  color: Colors.black,
+                ),
+              ),
+
+              SizedBox(height: 10.0,),
+
+              GestureDetector(
+                onTap: () {
+                  customLaunch('tel:+1 555 555 555');
+                },
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 15.0),
+                  width: MediaQuery.of(context).size.width,
+                  height: 50.0,
+                  decoration: BoxDecoration(
+                    color: Colors.brown,
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Call :- 8603587194",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              GestureDetector(
+                onTap: () {
+                  whatsappmessage('+91 9821049942');
+
+                },
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 15.0),
+                  width: MediaQuery.of(context).size.width,
+                  height: 50.0,
+                  decoration: BoxDecoration(
+                    color: Colors.brown,
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Whatsapp :- 8603587194",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              GestureDetector(
+                onTap: () {
+                  launchWhatsApp(phone: '+91 586522',message: "Hello");
+                },
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 15.0),
+                  width: MediaQuery.of(context).size.width,
+                  height: 50.0,
+                  decoration: BoxDecoration(
+                    color: Colors.brown,
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Share",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

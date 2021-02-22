@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:food_delivery/adminPage/loading_page_admin.dart';
 import 'package:food_delivery/src/food_list_data.dart';
 import 'package:food_delivery/src/food_notifier.dart';
+import 'package:food_delivery/src/main_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -11,9 +11,7 @@ import 'food_api.dart';
 
 class AddfooditemAdmin extends StatefulWidget {
 
-  final bool isUpdating;
-
-  AddfooditemAdmin({@required this.isUpdating});
+  final bool isUpdating = false ;
 
   @override
   _AddfooditemAdminState createState() => _AddfooditemAdminState();
@@ -27,11 +25,11 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
   String _imageUrl;
   File _imageFile;
 
-  var _FoodListCatagory = ["Thali", "Chinese","Refreshment","Snacks","Desserts"];
+  var _FoodListCatagory = ["Mobile", "Books","Furniture","Computer","Electronic "];
 
   var _FoodListSale = ["OnSale", "Not Sale"];
 
-  var _currentFoodCatagoryList = "Thali";
+  var _currentFoodCatagoryList = "Mobile";
   var _currentFoodSaleList = "Not Sale" ;
 
   @override
@@ -115,14 +113,12 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
   _onFoodUploaded(Food food) {
     FoodNotifier foodNotifier = Provider.of<FoodNotifier>(context, listen: false);
     foodNotifier.addFood(food);
-    Navigator.pop(context);
-    Navigator.pop(context);
   }
 
   Widget _buildNameField(){
     return TextFormField(
       initialValue: _currentFood.title,
-      decoration: InputDecoration(labelText: "Name"),
+      decoration: InputDecoration(labelText: "Enter Title"),
       keyboardType: TextInputType.text,
       style: TextStyle(fontSize: 18.0),
       validator: (String value){
@@ -238,14 +234,14 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
   Widget _buildDiscountField(){
     return TextFormField(
       initialValue: _currentFood.discount,
-      decoration: InputDecoration(labelText: "Discount"),
+      decoration: InputDecoration(labelText: "Phone Number"),
       keyboardType: TextInputType.number,
       style: TextStyle(fontSize: 18.0),
       validator: (String value){
         if(value.isEmpty){
           return "Discount field is required";
         }
-        if(value.length>3){
+        if(value.length >10 ){
           return "";
         }
         return null;
@@ -264,7 +260,7 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
     _formkey.currentState.save();
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context){
-          return LoadingPage();
+          return Main_screen();
         }
     ));
 
@@ -283,9 +279,6 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Food Form"),
-      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(32.0),
         child: Form(
@@ -296,7 +289,7 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
               _showImage(),
               SizedBox(height: 16.0,),
               Text(
-                 widget.isUpdating ? "Updating Food Item" : "ADD Food Item",
+                 widget.isUpdating ? "Updating Food Item" : "Post Your Ads",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 30.0),
               ),
@@ -304,9 +297,10 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
               _imageFile == null && _imageUrl == null
                ? ButtonTheme(
                 child: RaisedButton(
+                  color: Colors.brown,
                   onPressed: ()=> _getLocalImage(),
                   child: Text(
-                    "Add Image",
+                    "Add Photo",
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -317,23 +311,42 @@ class _AddfooditemAdminState extends State<AddfooditemAdmin> {
 
               _buildNameField(),
               _buildCatagoryField(),
-              _buildOnSaleField(),
-              _buildDiscriptionField(),
               _buildPriceField(),
               _buildDiscountField(),
+              _buildDiscriptionField(),
 
+              SizedBox(height: 20.0,),
 
-              SizedBox(height: 16.0,),
+              GestureDetector(
+                onTap: () {
+                   _saveFood();
+                },
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 25.0),
+                  width: MediaQuery.of(context).size.width,
+                  height: 50.0,
+                  decoration: BoxDecoration(
+                    color: Colors.brown,
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Post",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
             ],
           ),
         ),
       ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _saveFood(),
-        child: Icon(Icons.save),
-        foregroundColor: Colors.white,
-      ),
     );
   }
 }

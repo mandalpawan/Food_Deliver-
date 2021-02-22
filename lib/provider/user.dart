@@ -5,7 +5,6 @@ import 'package:food_delivery/model/cartitem.dart';
 import 'package:food_delivery/model/order.dart';
 import 'package:food_delivery/model/product.dart';
 import 'package:food_delivery/model/user.dart';
-import 'package:food_delivery/services/order.dart';
 import 'package:food_delivery/services/user.dart';
 import 'package:food_delivery/src/food_list_data.dart';
 import 'package:uuid/uuid.dart';
@@ -18,7 +17,7 @@ class UserProvider with ChangeNotifier {
   FirebaseUser _user;
   Status _status = Status.Uninitialized;
   UserServices _userServices = UserServices();
-  OrderServices _orderServices = OrderServices();
+
   int _totalSale = 0;
   int _totalprocessingItem = 0;
   int _totalSoldItem = 0;
@@ -116,7 +115,6 @@ class UserProvider with ChangeNotifier {
       _user = user;
       _userModel = await _userServices.getUserById(user.uid);
       _status = Status.Authenticated;
-      await getAllOrder();
       await getTotalSale();
       await getTotalPendingItem();
       await getTotalSoldItem();
@@ -213,15 +211,7 @@ class UserProvider with ChangeNotifier {
 
   }
 
-  getOrders()async{
-    orders = await _orderServices.getUserOrders(userId: _user.uid);
-    notifyListeners();
-  }
 
-  getAllOrder() async{
-    ordersAll = await _orderServices.getUserOrders();
-    notifyListeners();
-  }
 
   //get total sold price
   getTotalSale() async {

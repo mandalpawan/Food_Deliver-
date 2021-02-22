@@ -1,13 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:food_delivery/page/chnagepswd.dart';
 import 'package:food_delivery/provider/user.dart';
-import 'package:food_delivery/src/edit_form.dart';
-import 'package:food_delivery/src/loding_page.dart';
-import 'package:food_delivery/src/service_auth.dart';
-import 'package:food_delivery/src/sigin_page.dart';
-import 'package:food_delivery/src/user_database.dart';
-import 'package:food_delivery/src/user_model.dart';
+
+
 import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
@@ -16,22 +10,8 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-
-  final AuthService _auth = AuthService();
-
   bool turnonNotification = false;
   bool turnonLocation = false;
-
-  void showSettingPanel(){
-    showModalBottomSheet(context: context, builder: (context){
-      return Container(
-        padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 20.0),
-        child: editForm(),
-      );
-    });
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -58,15 +38,15 @@ class _ProfileState extends State<Profile> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    height: 100.0,
-                    width: 100.0,
+                    height: 80.0,
+                    width: 80.0,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50.0),
+                      borderRadius: BorderRadius.circular(40.0),
                       boxShadow: [
                         BoxShadow(
                           blurRadius: 3.0,
                           offset: Offset(0,4.0),
-                          color: Colors.blueGrey,
+                          color: Colors.brown,
                         ),
                       ],
                     ),
@@ -95,28 +75,7 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       SizedBox(height: 10.0,),
-                      GestureDetector(
-                        onTap: (){
-                          showSettingPanel();
-                        },
-                        child: Container(
-                          height: 25.0,
-                          width: 60.0,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blue),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Edit",
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: 16.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+
                     ],
                   ),
                 ],
@@ -143,7 +102,7 @@ class _ProfileState extends State<Profile> {
                           children: <Widget>[
                             Icon(
                               Icons.location_on,
-                              color: Colors.blue,
+                              color: Colors.brown,
                             ),
                             SizedBox(width: 15.0,),
                             Text(
@@ -160,17 +119,13 @@ class _ProfileState extends State<Profile> {
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(
                           onTap: (){
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context){
-                               return TimerApp();
-                              }
-                            ));
+
                           },
                           child: Row(
                             children: <Widget>[
                               Icon(
                                 Icons.visibility,
-                                color: Colors.blue,
+                                color: Colors.brown,
                               ),
                               SizedBox(width: 15.0,),
                               Text(
@@ -184,43 +139,6 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       Divider(height: 10.0,color: Colors.grey,),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.shopping_cart,
-                              color: Colors.blue,
-                            ),
-                            SizedBox(width: 15.0,),
-                            Text(
-                              "Shopping",
-                              style: TextStyle(
-                                fontSize: 16.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(height: 10.0,color: Colors.grey,),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.payment,
-                              color: Colors.blue,
-                            ),
-                            SizedBox(width: 15.0,),
-                            Text(
-                              "Payment",
-                              style: TextStyle(
-                                fontSize: 16.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ),

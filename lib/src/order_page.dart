@@ -3,9 +3,8 @@ import 'package:food_delivery/model/cartitem.dart';
 import 'package:food_delivery/page/loading.dart';
 import 'package:food_delivery/provider/app.dart';
 import 'package:food_delivery/provider/user.dart';
-import 'package:food_delivery/services/order.dart';
+
 import 'package:food_delivery/src/order_adress_form.dart';
-import 'package:food_delivery/src/paymentgateway.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -16,7 +15,7 @@ class Order extends StatefulWidget {
 
 class _OrderState extends State<Order> {
   final _key = GlobalKey<ScaffoldState>();
-  OrderServices _orderServices = OrderServices();
+
 
   @override
   Widget build(BuildContext context) {

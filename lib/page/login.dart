@@ -49,7 +49,7 @@ class _LoginState extends State<Login> {
                           child: Container(
                               alignment: Alignment.topCenter,
                             height: 200.0,
-                            child: Image.asset('assets/images/Illu/welcome.png'),
+                            child: Image.asset('assets/images/image6.jpg'),
                              ),
                         ),
 
@@ -118,7 +118,7 @@ class _LoginState extends State<Login> {
                           const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
                           child: Material(
                               borderRadius: BorderRadius.circular(20.0),
-                              color: Colors.lightBlueAccent,
+                              color: Colors.brown,
                               elevation: 0.0,
                               child: MaterialButton(
                                 onPressed: () async{

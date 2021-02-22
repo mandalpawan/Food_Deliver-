@@ -36,7 +36,7 @@ class _SerchBoxState extends State<SerchBox> {
         },
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(vertical: 16.0,horizontal: 25.0),
-          hintText: "Search any food",
+          hintText: "What you want to buy ?",
           suffixIcon: Material(
             elevation: 5.0,
             borderRadius: BorderRadius.circular(30.0),

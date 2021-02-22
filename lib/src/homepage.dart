@@ -1,11 +1,11 @@
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food_delivery/page/all_page.dart';
 import 'package:food_delivery/provider/user.dart';
 import 'package:provider/provider.dart';
-import 'catagory.dart';
 import 'serch_box.dart';
 import 'food_list.dart';
+
 
 
 
@@ -21,6 +21,27 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
     print(user.userModel.userType);
+
+    Widget image_carousal = Container(
+      height: 200.0,
+      child: Carousel(
+        boxFit: BoxFit.cover,
+        images: [
+          AssetImage('assets/images/image1.png'),
+          AssetImage('assets/images/image2.png'),
+          AssetImage('assets/images/image3.jpg'),
+          AssetImage('assets/images/image4.jpg'),
+          AssetImage('assets/images/image5.jfif'),
+        ],
+        autoplay: true,
+        animationCurve: Curves.fastOutSlowIn,
+        animationDuration: Duration(milliseconds: 1000),
+        indicatorBgPadding: 2.0,
+        dotBgColor: Colors.transparent,
+        dotSize: 3.0,
+      ),
+    );
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: ListView(
@@ -28,62 +49,13 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
 
           //========Top Most Part ==========================
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children:  <Widget>[
-                  Text("What would",
-                    style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.w800),
-                  ),
-                  Text("you like to eat?",
-                    style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.w800),
-                  ),
-                ],
-              ),
 
-                ],
-          ),
+          //image slider
+          image_carousal,
 
-
-          //Horizontal List of Item
-          horizontal_list(),
           SizedBox(height: 20.0,),
           //Serch Menu
           SerchBox(),
-
-          //Start  food box
-          SizedBox(height: 20.0,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                "Frequently Bought Food",
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              GestureDetector(
-                onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context){
-                      return AllItem();
-                    }
-                  ));
-                },
-                child: Text(
-                  "View All",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.orangeAccent,
-                  ),
-                ),
-              )
-            ],
-          ),
 
           //Frenently Bough Item List
           SizedBox(height: 20.0,),

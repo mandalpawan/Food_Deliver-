@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery/src/payment.dart';
+
 
 class OrderFrom extends StatefulWidget {
   @override
@@ -149,7 +149,7 @@ class _OrderFromState extends State<OrderFrom> {
                           ),
                         ),
                       ),
-
+                   /*
                       Padding(
                         padding:
                         const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
@@ -177,7 +177,7 @@ class _OrderFromState extends State<OrderFrom> {
                                     fontSize: 20.0),
                               ),
                             )),
-                      ),
+                      ),*/
                     ],
                   )),
             ),

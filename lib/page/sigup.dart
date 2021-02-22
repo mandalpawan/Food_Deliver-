@@ -52,7 +52,7 @@ class _SignUpState extends State<SignUp> {
                         child: Container(
                             alignment: Alignment.topCenter,
                             child: Image.asset(
-                              'assets/images/Illu/welcome.png',
+                              'assets/images/image6.jpg',
                               width: 260.0,height: 150.0,
                             )),
                       ),
@@ -159,7 +159,7 @@ class _SignUpState extends State<SignUp> {
                         const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
                         child: Material(
                             borderRadius: BorderRadius.circular(20.0),
-                            color: Colors.black,
+                            color: Colors.brown,
                             elevation: 0.0,
                             child: MaterialButton(
                               onPressed: () async{
